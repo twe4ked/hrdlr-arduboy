@@ -3,7 +3,7 @@
 Arduboy arduboy;
 
 void setup() {
-  arduboy.begin();
+  arduboy.beginNoLogo();
   arduboy.setFrameRate(15); // default 60
 }
 
