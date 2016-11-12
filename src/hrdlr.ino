@@ -51,7 +51,7 @@ void loop() {
 
   // Jump
   if (arduboy.pressed(B_BUTTON) && currentJumpFrame == 0) {
-    currentJumpFrame = jumpFrame; //....
+    currentJumpFrame = jumpFrame;
   }
 
   if (currentJumpFrame > 0) {
