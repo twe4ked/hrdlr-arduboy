@@ -4,7 +4,6 @@ Arduboy arduboy;
 
 void setup() {
   arduboy.beginNoLogo();
-  arduboy.setFrameRate(15); // default 60
 }
 
 const uint8_t playerYDefault = 55;
