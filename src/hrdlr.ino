@@ -13,9 +13,10 @@ uint8_t currentJumpFrame = 0;
 struct Player {
   uint8_t X;
   uint8_t Y;
+  uint8_t idleAnimationFrame;
 };
 
-Player player = {5, playerYDefault};
+Player player = {5, playerYDefault, 0};
 
 double jumpCurve(double currentJumpFrame) {
   double n = (currentJumpFrame * (1.0 / jumpFrame));
@@ -32,7 +33,7 @@ void loop() {
   arduboy.clear();
 
   // Draw player
-  arduboy.drawBitmap(player.X, player.Y, playerFrames[0], 8, 16, WHITE);
+  arduboy.drawBitmap(player.X, player.Y, playerFrames[player.idleAnimationFrame], playerFrameWidth, playerFrameHeight, WHITE);
 
   // Draw floor
   arduboy.drawFastHLine(0, HEIGHT-1, WIDTH-1, WHITE);
@@ -47,6 +48,12 @@ void loop() {
     player.Y = playerYDefault - jumpCurve(currentJumpFrame);
   } else {
     player.Y = playerYDefault;
+  }
+
+  // Idle animation
+  if (arduboy.everyXFrames(8)) {
+    player.idleAnimationFrame++;
+    player.idleAnimationFrame = player.idleAnimationFrame % 3;
   }
 
   arduboy.display();
