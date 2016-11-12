@@ -1,10 +1,10 @@
 .PHONY: default upload clean
 
 default:
-	platformio run
+	platformio run --silent
 
 upload:
-	platformio run --target upload
+	platformio run --silent --target upload
 
 clean:
-	platformio run --target clean
+	platformio run --silent --target clean
