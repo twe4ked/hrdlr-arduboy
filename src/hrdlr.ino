@@ -2,10 +2,6 @@
 
 Arduboy arduboy;
 
-void setup() {
-  arduboy.beginNoLogo();
-}
-
 const uint8_t playerYDefault = 55;
 const uint8_t jumpCurve[] = {0, 0, 3, 6, 9, 9, 9, 6, 3, 0};
 
@@ -17,6 +13,10 @@ struct Player {
 };
 
 Player player = {5, playerYDefault};
+
+void setup() {
+  arduboy.beginNoLogo();
+}
 
 void loop() {
   if (!(arduboy.nextFrame())) return;
