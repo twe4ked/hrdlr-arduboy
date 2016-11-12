@@ -56,5 +56,9 @@ void loop() {
     player.idleAnimationFrame = player.idleAnimationFrame % 3;
   }
 
+  if (currentJumpFrame > 0) {
+    player.idleAnimationFrame = 3;
+  }
+
   arduboy.display();
 }
