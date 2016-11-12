@@ -7,7 +7,7 @@ Arduboy arduboy;
 
 #define FPS 60
 
-const uint8_t playerYDefault = 47;
+const uint8_t playerYDefault = HEIGHT - playerFrameHeight - 1;
 const uint8_t jumpHeight = 20;
 const uint8_t jumpFrame = 30;
 
