@@ -1,7 +1,7 @@
 all: bitmaps pngs cp
 
-bitmaps: player.h
-pngs: player.png
+bitmaps: player.h banner.h
+pngs: player.png banner.png
 
 %.png: %.ase
 	/Applications/Aseprite.app/Contents/MacOS/aseprite -b --sheet-type vertical --format json-array --data $(basename $@).json --sheet $@ $<

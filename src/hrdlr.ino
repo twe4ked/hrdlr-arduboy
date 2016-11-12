@@ -1,14 +1,18 @@
 #include <Arduboy.h>
 #include <Math.h>
+#include <bitmaps/banner.h>
 #include <bitmaps/player.h>
 
 Arduboy arduboy;
+
+#define FPS 60
 
 const uint8_t playerYDefault = 47;
 const uint8_t jumpHeight = 20;
 const uint8_t jumpFrame = 30;
 
 uint8_t currentJumpFrame = 0;
+uint8_t introFrameCount = FPS * 2;
 
 struct Player {
   uint8_t X;
@@ -31,6 +35,13 @@ void loop() {
   if (!(arduboy.nextFrame())) return;
 
   arduboy.clear();
+
+  if (introFrameCount > 0) {
+    introFrameCount--;
+    arduboy.drawBitmap(0, 0, bannerFrames[0], bannerFrameWidth, bannerFrameHeight, WHITE);
+    arduboy.display();
+    return;
+  }
 
   // Draw player
   arduboy.drawBitmap(player.X, player.Y, playerFrames[player.idleAnimationFrame], playerFrameWidth, playerFrameHeight, WHITE);
