@@ -1,11 +1,13 @@
 #include <Arduboy.h>
+#include <Math.h>
 
 Arduboy arduboy;
 
 const uint8_t playerYDefault = 55;
-const uint8_t jumpCurve[] = {0, 0, 3, 6, 9, 9, 9, 6, 3, 0};
+const uint8_t jumpHeight = 20;
+const uint8_t jumpFrame = 30;
 
-uint8_t jumpFrame = 0;
+uint8_t currentJumpFrame = 0;
 
 struct Player {
   uint8_t X;
@@ -13,6 +15,11 @@ struct Player {
 };
 
 Player player = {5, playerYDefault};
+
+double jumpCurve(double currentJumpFrame) {
+  double n = (currentJumpFrame * (1.0 / jumpFrame));
+  return sin((n * 180) * PI / 180) * jumpHeight;
+}
 
 void setup() {
   arduboy.beginNoLogo();
@@ -30,13 +37,13 @@ void loop() {
   arduboy.drawFastHLine(0, HEIGHT-1, WIDTH-1, WHITE);
 
   // Jump
-  if (arduboy.pressed(B_BUTTON) && jumpFrame == 0) {
-    jumpFrame = 9;
+  if (arduboy.pressed(B_BUTTON) && currentJumpFrame == 0) {
+    currentJumpFrame = jumpFrame; //....
   }
 
-  if (jumpFrame > 0) {
-    jumpFrame--;
-    player.Y = playerYDefault - jumpCurve[jumpFrame];
+  if (currentJumpFrame > 0) {
+    currentJumpFrame--;
+    player.Y = playerYDefault - jumpCurve(currentJumpFrame);
   } else {
     player.Y = playerYDefault;
   }
