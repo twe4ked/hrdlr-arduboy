@@ -1,2 +1,5 @@
 .pioenvs
 .piolibdeps
+assets/*.png
+assets/*.h
+assets/*.json

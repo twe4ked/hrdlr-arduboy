@@ -1,9 +1,10 @@
 #include <Arduboy.h>
 #include <Math.h>
+#include <bitmaps/player.h>
 
 Arduboy arduboy;
 
-const uint8_t playerYDefault = 55;
+const uint8_t playerYDefault = 47;
 const uint8_t jumpHeight = 20;
 const uint8_t jumpFrame = 30;
 
@@ -31,7 +32,7 @@ void loop() {
   arduboy.clear();
 
   // Draw player
-  arduboy.fillRect(player.X, player.Y, 4, 8, WHITE);
+  arduboy.drawBitmap(player.X, player.Y, playerFrames[0], 8, 16, WHITE);
 
   // Draw floor
   arduboy.drawFastHLine(0, HEIGHT-1, WIDTH-1, WHITE);
