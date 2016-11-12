@@ -1,6 +1,7 @@
 #include <Arduboy.h>
 #include <Math.h>
 #include <bitmaps/banner.h>
+#include <bitmaps/hurdle.h>
 #include <bitmaps/player.h>
 
 Arduboy arduboy;
@@ -10,9 +11,11 @@ Arduboy arduboy;
 const uint8_t playerYDefault = HEIGHT - playerFrameHeight - 1;
 const uint8_t jumpHeight = 20;
 const uint8_t jumpFrame = 30;
+const uint8_t maxHurdles = 5;
 
 uint8_t currentJumpFrame = 0;
 uint8_t introFrameCount = FPS * 2;
+int16_t hurdles[maxHurdles];
 
 struct Player {
   uint8_t X;
@@ -27,7 +30,15 @@ double jumpCurve(double currentJumpFrame) {
   return sin((n * 180) * PI / 180) * jumpHeight;
 }
 
+uint8_t randInRange(int minN, int maxN) {
+  return (rand() % (maxN - minN)) + minN;
+}
+
 void setup() {
+  for (int i = 0; i < maxHurdles; i++) {
+    hurdles[i] = -hurdleFrameWidth;
+  }
+
   arduboy.beginNoLogo();
 }
 
@@ -48,6 +59,28 @@ void loop() {
 
   // Draw floor
   arduboy.drawFastHLine(0, HEIGHT-1, WIDTH-1, WHITE);
+
+  for (int i = 0; i < maxHurdles; i++) {
+    if (hurdles[i] < -hurdleFrameWidth) {
+      int minDistance;
+
+      if (i == 0) {
+        minDistance = hurdles[maxHurdles-1];
+      } else {
+        minDistance = hurdles[i-1];
+      }
+
+      if (minDistance < WIDTH) {
+        minDistance = WIDTH;
+      }
+
+      hurdles[i] = minDistance + randInRange(40, 80);
+    }
+
+    arduboy.drawBitmap(hurdles[i], HEIGHT - hurdleFrameHeight - 1, hurdleFrames[0], hurdleFrameWidth, hurdleFrameHeight, WHITE);
+
+    hurdles[i]--;
+  }
 
   // Jump
   if (arduboy.pressed(B_BUTTON) && currentJumpFrame == 0) {
