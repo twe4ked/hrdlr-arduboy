@@ -11,15 +11,18 @@ uint8_t currentJumpFrame = 0;
 uint8_t introFrameCount = FRAMERATE * 2;
 int16_t hurdles[maxHurdles];
 uint16_t score = 0;
+uint8_t deadCounter = 0;
 
 struct Player {
   uint8_t X;
   uint8_t Y;
   uint8_t idleAnimationFrame;
   uint8_t runningAnimationFrame;
+  uint8_t deathAnimationFrame;
+  bool isDead;
 };
 
-Player player = {playerXDefault, playerYDefault, 0, 0};
+Player player = {playerXDefault, playerYDefault, 0, 0, 0, false};
 
 double jumpCurve(double currentJumpFrame) {
   double n = (currentJumpFrame * (1.0 / jumpFrame));
@@ -49,6 +52,12 @@ void handleInput() {
   }
 }
 
+void resetHurdles() {
+  for (int i = 0; i < maxHurdles; i++) {
+    hurdles[i] = -hurdleFrameWidth;
+  }
+}
+
 void drawScore() {
   arduboy.setCursor(100, 1);
   char scoreBuffer[16];
@@ -56,7 +65,13 @@ void drawScore() {
   arduboy.print(scoreBuffer);
 }
 
-void updateAndDrawHurdles() {
+void drawHurdles() {
+  for (int i = 0; i < maxHurdles; i++) {
+    arduboy.drawBitmap(hurdles[i], hurdleY, hurdleFrames[0], hurdleFrameWidth, hurdleFrameHeight, WHITE);
+  }
+}
+
+void updateHurdles() {
   for (int i = 0; i < maxHurdles; i++) {
     if (hurdles[i] < -hurdleFrameWidth) {
       int minDistance;
@@ -73,8 +88,6 @@ void updateAndDrawHurdles() {
 
       hurdles[i] = minDistance + randInRange(40, 80);
     }
-
-    arduboy.drawBitmap(hurdles[i], hurdleY, hurdleFrames[0], hurdleFrameWidth, hurdleFrameHeight, WHITE);
 
     hurdles[i]--;
   }
@@ -97,13 +110,17 @@ int currentPlayerJumpAnimationFrameIndex() {
 int currentPlayerAnimationFrameIndex() {
   if (currentJumpFrame > 0) {
     return currentPlayerJumpAnimationFrameIndex();
+  } else if (player.isDead) {
+    return (2 - player.deathAnimationFrame) + 10;
   } else {
     return player.runningAnimationFrame;
   }
 }
 
 void drawPlayer() {
-  arduboy.drawBitmap(player.X, player.Y, playerFrames[currentPlayerAnimationFrameIndex()], playerFrameWidth, playerFrameHeight, WHITE);
+  if (!player.isDead || player.deathAnimationFrame != 0) {
+    arduboy.drawBitmap(player.X, player.Y, playerFrames[currentPlayerAnimationFrameIndex()], playerFrameWidth, playerFrameHeight, WHITE);
+  }
 }
 
 void drawFloor() {
@@ -121,14 +138,20 @@ void updateJumpFrame() {
 
 // Player animation frames
 //
-// 0-2 : idle
-// 3-5 : jump
-// 6-9 : running
+// 0-2   : idle
+// 3-5   : jump
+// 6-9   : running
+// 10-12 : dying
 void updateAnimationFrames() {
   if (arduboy.everyXFrames(8)) {
     // 0-2
     player.idleAnimationFrame++;
     player.idleAnimationFrame = player.idleAnimationFrame % 3;
+
+    // 10-12
+    if (player.deathAnimationFrame > 0) {
+      player.deathAnimationFrame--;
+    }
   }
 
   if (arduboy.everyXFrames(6)) {
@@ -147,6 +170,9 @@ void checkForCollision() {
       )
     ) {
       // Kill player
+      player.isDead = true;
+      player.deathAnimationFrame = 2;
+      deadCounter = 10;
       score = 0;
       arduboy.tunes.tone(300, 50);
     }
@@ -177,13 +203,26 @@ void run() {
 
   drawScore();
 
-  updateAndDrawHurdles();
+  drawHurdles();
 
-  handleInput();
+  if (!player.isDead) {
+    updateHurdles();
+    handleInput();
+  }
+
+  if (deadCounter > 0) {
+    if (deadCounter == 1) {
+      player.isDead = false;
+      resetHurdles();
+    }
+    deadCounter--;
+  }
 
   updateJumpFrame();
 
   updateAnimationFrames();
 
-  checkForCollision();
+  if (!player.isDead) {
+    checkForCollision();
+  }
 }

@@ -1,7 +1,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-const uint8_t playerFrameCount = 10;
+const uint8_t playerFrameCount = 13;
 const uint8_t playerFrameWidth = 8;
 const uint8_t playerFrameHeight = 16;
 const uint8_t PROGMEM playerFrames[][16] = {
@@ -194,7 +194,64 @@ const uint8_t PROGMEM playerFrames[][16] = {
       ###  ## 
            ###
   */
-  {0x00,0xb0,0x7c,0xf2,0xdf,0x72,0x84,0x00,0x67,0x77,0x58,0x1f,0x0f,0xde,0xe7,0x80}
+  {0x00,0xb0,0x7c,0xf2,0xdf,0x72,0x84,0x00,0x67,0x77,0x58,0x1f,0x0f,0xde,0xe7,0x80},
+  /* Frame number 10
+       #   #  
+        # #   
+          # # 
+        # #   
+       #####  
+       ### #  
+        ##### 
+         ##   
+       # ## # 
+         ## # 
+         ## # 
+        ####  
+       ### #  
+         #    
+              
+              
+  */
+  {0x00,0x31,0x7a,0xf0,0xde,0x71,0x44,0x00,0x00,0x11,0x18,0x3f,0x0f,0x18,0x07,0x00},
+  /* Frame number 11
+              
+              
+              
+        ##    
+              
+       #   #  
+        ####  
+         ##   
+       # ##   
+         #  # 
+         # #  
+              
+       #   #  
+              
+              
+              
+  */
+  {0x00,0x20,0x48,0xc8,0xc0,0x60,0x00,0x00,0x00,0x11,0x00,0x07,0x01,0x14,0x02,0x00},
+  /* Frame number 12
+              
+              
+              
+              
+              
+              
+         #    
+              
+       # ##   
+              
+         # #  
+              
+              
+              
+              
+              
+  */
+  {0x00,0x00,0x00,0x40,0x00,0x00,0x00,0x00,0x00,0x01,0x00,0x05,0x01,0x04,0x00,0x00}
 };
 
 #endif

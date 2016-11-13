@@ -7,10 +7,7 @@
 #include <game.h>
 
 void setup() {
-  for (int i = 0; i < maxHurdles; i++) {
-    hurdles[i] = -hurdleFrameWidth;
-  }
-
+  resetHurdles();
   arduboy.beginNoLogo();
 }
 
