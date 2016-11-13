@@ -13,6 +13,7 @@ const uint8_t playerYDefault = HEIGHT - playerFrameHeight - 1;
 const uint8_t jumpHeight = 20;
 const uint8_t jumpFrame = 30;
 const uint8_t maxHurdles = 5;
+const uint8_t hurdleY = HEIGHT - hurdleFrameHeight - 1;
 
 uint8_t currentJumpFrame = 0;
 uint8_t introFrameCount = FPS * 2;
@@ -34,6 +35,18 @@ double jumpCurve(double currentJumpFrame) {
 
 uint8_t randInRange(int minN, int maxN) {
   return (rand() % (maxN - minN)) + minN;
+}
+
+bool collision(
+  int x1, int y1, int height1, int width1,
+  int x2, int y2, int height2, int width2
+) {
+  return (
+    x1 < x2 + width2-1 &&
+    x1 + width1-1 > x2 &&
+    y1 < y2 + height2-1 &&
+    height1-1 + y1 > y2
+  );
 }
 
 void setup() {
@@ -79,7 +92,7 @@ void loop() {
       hurdles[i] = minDistance + randInRange(40, 80);
     }
 
-    arduboy.drawBitmap(hurdles[i], HEIGHT - hurdleFrameHeight - 1, hurdleFrames[0], hurdleFrameWidth, hurdleFrameHeight, WHITE);
+    arduboy.drawBitmap(hurdles[i], hurdleY, hurdleFrames[0], hurdleFrameWidth, hurdleFrameHeight, WHITE);
 
     hurdles[i]--;
   }
@@ -110,6 +123,25 @@ void loop() {
   if (currentJumpFrame > 0) {
     player.idleAnimationFrame = 3;
     player.runningAnimationFrame = 3;
+  }
+
+  // Check for collision
+  for (int i = 0; i < maxHurdles; i++) {
+    if (
+      collision(
+        player.X,
+        player.Y,
+        playerFrameHeight,
+        playerFrameWidth,
+        hurdles[i], // x,
+        hurdleY,
+        hurdleFrameHeight,
+        hurdleFrameWidth
+      )
+    ) {
+      // Kill player
+      arduboy.tunes.tone(300, 50);
+    }
   }
 
   arduboy.display();
