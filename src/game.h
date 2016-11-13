@@ -97,6 +97,23 @@ void updateJumpFrame() {
   }
 }
 
+void updateAnimationFrames() {
+  if (arduboy.everyXFrames(8)) {
+    player.idleAnimationFrame++;
+    player.idleAnimationFrame = player.idleAnimationFrame % 3;
+  }
+
+  if (arduboy.everyXFrames(6)) {
+    player.runningAnimationFrame++;
+    player.runningAnimationFrame = (player.runningAnimationFrame % 4) + 4;
+  }
+
+  if (currentJumpFrame > 0) {
+    player.idleAnimationFrame = 3;
+    player.runningAnimationFrame = 3;
+  }
+}
+
 void run() {
   if (introFrameCount > 0) {
     introFrameCount--;
@@ -117,21 +134,7 @@ void run() {
 
   updateJumpFrame();
 
-  // Idle animation
-  if (arduboy.everyXFrames(8)) {
-    player.idleAnimationFrame++;
-    player.idleAnimationFrame = player.idleAnimationFrame % 3;
-  }
-
-  if (arduboy.everyXFrames(6)) {
-    player.runningAnimationFrame++;
-    player.runningAnimationFrame = (player.runningAnimationFrame % 4) + 4;
-  }
-
-  if (currentJumpFrame > 0) {
-    player.idleAnimationFrame = 3;
-    player.runningAnimationFrame = 3;
-  }
+  updateAnimationFrames();
 
   // Check for collision
   for (int i = 0; i < maxHurdles; i++) {
