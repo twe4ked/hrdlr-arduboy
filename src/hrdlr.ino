@@ -129,14 +129,8 @@ void loop() {
   for (int i = 0; i < maxHurdles; i++) {
     if (
       collision(
-        player.X,
-        player.Y,
-        playerFrameHeight,
-        playerFrameWidth,
-        hurdles[i], // x,
-        hurdleY,
-        hurdleFrameHeight,
-        hurdleFrameWidth
+        player.X, player.Y, playerFrameHeight, playerFrameWidth,
+        hurdles[i], hurdleY, hurdleFrameHeight, hurdleFrameWidth
       )
     ) {
       // Kill player
