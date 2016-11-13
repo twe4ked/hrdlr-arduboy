@@ -56,22 +56,7 @@ void drawScore() {
   arduboy.print(scoreBuffer);
 }
 
-void run() {
-  if (introFrameCount > 0) {
-    introFrameCount--;
-    arduboy.drawBitmap(0, 0, bannerFrames[0], bannerFrameWidth, bannerFrameHeight, WHITE);
-    arduboy.display();
-    return;
-  }
-
-  // Draw player
-  arduboy.drawBitmap(player.X, player.Y, playerFrames[player.runningAnimationFrame], playerFrameWidth, playerFrameHeight, WHITE);
-
-  // Draw floor
-  arduboy.drawFastHLine(0, HEIGHT-1, WIDTH-1, WHITE);
-
-  drawScore();
-
+void updateAndDrawHurdles() {
   for (int i = 0; i < maxHurdles; i++) {
     if (hurdles[i] < -hurdleFrameWidth) {
       int minDistance;
@@ -93,6 +78,25 @@ void run() {
 
     hurdles[i]--;
   }
+}
+
+void run() {
+  if (introFrameCount > 0) {
+    introFrameCount--;
+    arduboy.drawBitmap(0, 0, bannerFrames[0], bannerFrameWidth, bannerFrameHeight, WHITE);
+    arduboy.display();
+    return;
+  }
+
+  // Draw player
+  arduboy.drawBitmap(player.X, player.Y, playerFrames[player.runningAnimationFrame], playerFrameWidth, playerFrameHeight, WHITE);
+
+  // Draw floor
+  arduboy.drawFastHLine(0, HEIGHT-1, WIDTH-1, WHITE);
+
+  drawScore();
+
+  updateAndDrawHurdles();
 
   handleInput();
 
