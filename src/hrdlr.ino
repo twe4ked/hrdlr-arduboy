@@ -8,6 +8,7 @@ Arduboy arduboy;
 
 #define FPS 60
 
+const uint8_t playerXDefault = 5;
 const uint8_t playerYDefault = HEIGHT - playerFrameHeight - 1;
 const uint8_t jumpHeight = 20;
 const uint8_t jumpFrame = 30;
@@ -24,7 +25,7 @@ struct Player {
   uint8_t runningAnimationFrame;
 };
 
-Player player = {5, playerYDefault, 0, 0};
+Player player = {playerXDefault, playerYDefault, 0, 0};
 
 double jumpCurve(double currentJumpFrame) {
   double n = (currentJumpFrame * (1.0 / jumpFrame));
