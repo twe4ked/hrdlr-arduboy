@@ -42,6 +42,13 @@ bool collision(
   );
 }
 
+void handleInput() {
+  // Jump
+  if (arduboy.pressed(B_BUTTON) && currentJumpFrame == 0) {
+    currentJumpFrame = jumpFrame;
+  }
+}
+
 void run() {
   if (introFrameCount > 0) {
     introFrameCount--;
@@ -84,10 +91,7 @@ void run() {
     hurdles[i]--;
   }
 
-  // Jump
-  if (arduboy.pressed(B_BUTTON) && currentJumpFrame == 0) {
-    currentJumpFrame = jumpFrame;
-  }
+  handleInput();
 
   if (currentJumpFrame > 0) {
     currentJumpFrame--;
