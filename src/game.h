@@ -80,9 +80,23 @@ void updateAndDrawHurdles() {
   }
 }
 
+int currentPlayerJumpAnimationFrameIndex() {
+  if (currentJumpFrame > 25) {
+    return 3;
+  } else if (currentJumpFrame > 20) {
+    return 4;
+  } else if (currentJumpFrame > 10) {
+    return 5;
+  } else if (currentJumpFrame > 5) {
+    return 4;
+  } else {
+    return 3;
+  }
+}
+
 int currentPlayerAnimationFrameIndex() {
   if (currentJumpFrame > 0) {
-    return 3;
+    return currentPlayerJumpAnimationFrameIndex();
   } else {
     return player.runningAnimationFrame;
   }
@@ -108,8 +122,8 @@ void updateJumpFrame() {
 // Player animation frames
 //
 // 0-2 : idle
-// 3   : jump
-// 4-7 : running
+// 3-5 : jump
+// 6-9 : running
 void updateAnimationFrames() {
   if (arduboy.everyXFrames(8)) {
     // 0-2
@@ -118,9 +132,9 @@ void updateAnimationFrames() {
   }
 
   if (arduboy.everyXFrames(6)) {
-    // 4-7
+    // 6-9
     player.runningAnimationFrame++;
-    player.runningAnimationFrame = (player.runningAnimationFrame % 4) + 4;
+    player.runningAnimationFrame = (player.runningAnimationFrame % 4) + 6;
   }
 }
 
