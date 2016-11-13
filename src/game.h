@@ -49,6 +49,13 @@ void handleInput() {
   }
 }
 
+void drawScore() {
+  arduboy.setCursor(100, 1);
+  char scoreBuffer[16];
+  sprintf(scoreBuffer, "% 3d", score);
+  arduboy.print(scoreBuffer);
+}
+
 void run() {
   if (introFrameCount > 0) {
     introFrameCount--;
@@ -63,11 +70,7 @@ void run() {
   // Draw floor
   arduboy.drawFastHLine(0, HEIGHT-1, WIDTH-1, WHITE);
 
-  // Draw score
-  arduboy.setCursor(100, 1);
-  char scoreBuffer[16];
-  sprintf(scoreBuffer, "% 3d", score);
-  arduboy.print(scoreBuffer);
+  drawScore();
 
   for (int i = 0; i < maxHurdles; i++) {
     if (hurdles[i] < -hurdleFrameWidth) {
