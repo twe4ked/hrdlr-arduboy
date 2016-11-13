@@ -80,6 +80,10 @@ void updateAndDrawHurdles() {
   }
 }
 
+void drawPlayer() {
+  arduboy.drawBitmap(player.X, player.Y, playerFrames[player.runningAnimationFrame], playerFrameWidth, playerFrameHeight, WHITE);
+}
+
 void run() {
   if (introFrameCount > 0) {
     introFrameCount--;
@@ -88,8 +92,7 @@ void run() {
     return;
   }
 
-  // Draw player
-  arduboy.drawBitmap(player.X, player.Y, playerFrames[player.runningAnimationFrame], playerFrameWidth, playerFrameHeight, WHITE);
+  drawPlayer();
 
   // Draw floor
   arduboy.drawFastHLine(0, HEIGHT-1, WIDTH-1, WHITE);
