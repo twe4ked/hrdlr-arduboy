@@ -80,8 +80,16 @@ void updateAndDrawHurdles() {
   }
 }
 
+int currentPlayerAnimationFrameIndex() {
+  if (currentJumpFrame > 0) {
+    return 3;
+  } else {
+    return player.runningAnimationFrame;
+  }
+}
+
 void drawPlayer() {
-  arduboy.drawBitmap(player.X, player.Y, playerFrames[player.runningAnimationFrame], playerFrameWidth, playerFrameHeight, WHITE);
+  arduboy.drawBitmap(player.X, player.Y, playerFrames[currentPlayerAnimationFrameIndex()], playerFrameWidth, playerFrameHeight, WHITE);
 }
 
 void drawFloor() {
@@ -106,11 +114,6 @@ void updateAnimationFrames() {
   if (arduboy.everyXFrames(6)) {
     player.runningAnimationFrame++;
     player.runningAnimationFrame = (player.runningAnimationFrame % 4) + 4;
-  }
-
-  if (currentJumpFrame > 0) {
-    player.idleAnimationFrame = 3;
-    player.runningAnimationFrame = 3;
   }
 }
 
