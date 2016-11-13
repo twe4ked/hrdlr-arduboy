@@ -18,6 +18,7 @@ const uint8_t hurdleY = HEIGHT - hurdleFrameHeight - 1;
 uint8_t currentJumpFrame = 0;
 uint8_t introFrameCount = FPS * 2;
 int16_t hurdles[maxHurdles];
+uint16_t score = 0;
 
 struct Player {
   uint8_t X;
@@ -74,6 +75,12 @@ void loop() {
 
   // Draw floor
   arduboy.drawFastHLine(0, HEIGHT-1, WIDTH-1, WHITE);
+
+  // Draw score
+  arduboy.setCursor(100, 1);
+  char scoreBuffer[16];
+  sprintf(scoreBuffer, "% 3d", score);
+  arduboy.print(scoreBuffer);
 
   for (int i = 0; i < maxHurdles; i++) {
     if (hurdles[i] < -hurdleFrameWidth) {
@@ -134,7 +141,18 @@ void loop() {
       )
     ) {
       // Kill player
+      score = 0;
       arduboy.tunes.tone(300, 50);
+    }
+
+    // Check for score collision
+    if (
+      collision(
+        player.X, 0, 2, 2,
+        hurdles[i], 0, 2, 2
+      )
+    ) {
+      score++;
     }
   }
 
