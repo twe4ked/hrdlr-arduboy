@@ -114,29 +114,7 @@ void updateAnimationFrames() {
   }
 }
 
-void run() {
-  if (introFrameCount > 0) {
-    introFrameCount--;
-    arduboy.drawBitmap(0, 0, bannerFrames[0], bannerFrameWidth, bannerFrameHeight, WHITE);
-    arduboy.display();
-    return;
-  }
-
-  drawPlayer();
-
-  drawFloor();
-
-  drawScore();
-
-  updateAndDrawHurdles();
-
-  handleInput();
-
-  updateJumpFrame();
-
-  updateAnimationFrames();
-
-  // Check for collision
+void checkForCollision() {
   for (int i = 0; i < maxHurdles; i++) {
     if (
       collision(
@@ -159,4 +137,29 @@ void run() {
       score++;
     }
   }
+}
+
+void run() {
+  if (introFrameCount > 0) {
+    introFrameCount--;
+    arduboy.drawBitmap(0, 0, bannerFrames[0], bannerFrameWidth, bannerFrameHeight, WHITE);
+    arduboy.display();
+    return;
+  }
+
+  drawPlayer();
+
+  drawFloor();
+
+  drawScore();
+
+  updateAndDrawHurdles();
+
+  handleInput();
+
+  updateJumpFrame();
+
+  updateAnimationFrames();
+
+  checkForCollision();
 }
