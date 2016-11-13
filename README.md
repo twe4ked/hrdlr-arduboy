@@ -1,5 +1,7 @@
 # Hrdlr Arduboy
 
+![](/banner.png)
+
 ``` sh
 # Install platformio
 brew install platformio
