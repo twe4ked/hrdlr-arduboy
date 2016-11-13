@@ -105,13 +105,20 @@ void updateJumpFrame() {
   }
 }
 
+// Player animation frames
+//
+// 0-2 : idle
+// 3   : jump
+// 4-7 : running
 void updateAnimationFrames() {
   if (arduboy.everyXFrames(8)) {
+    // 0-2
     player.idleAnimationFrame++;
     player.idleAnimationFrame = player.idleAnimationFrame % 3;
   }
 
   if (arduboy.everyXFrames(6)) {
+    // 4-7
     player.runningAnimationFrame++;
     player.runningAnimationFrame = (player.runningAnimationFrame % 4) + 4;
   }
