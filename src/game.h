@@ -88,6 +88,15 @@ void drawFloor() {
   arduboy.drawFastHLine(0, HEIGHT-1, WIDTH-1, WHITE);
 }
 
+void updateJumpFrame() {
+  if (currentJumpFrame > 0) {
+    currentJumpFrame--;
+    player.Y = playerYDefault - jumpCurve(currentJumpFrame);
+  } else {
+    player.Y = playerYDefault;
+  }
+}
+
 void run() {
   if (introFrameCount > 0) {
     introFrameCount--;
@@ -106,12 +115,7 @@ void run() {
 
   handleInput();
 
-  if (currentJumpFrame > 0) {
-    currentJumpFrame--;
-    player.Y = playerYDefault - jumpCurve(currentJumpFrame);
-  } else {
-    player.Y = playerYDefault;
-  }
+  updateJumpFrame();
 
   // Idle animation
   if (arduboy.everyXFrames(8)) {
