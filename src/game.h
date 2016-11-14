@@ -310,9 +310,18 @@ void drawPauseScreen() {
   drawScore();
   drawMute();
 
-  printCenter(20, F("PAUSED"));
-  printCenter(30, F("Press UP to resume!"));
-  printCenter(40, F("LEFT to toggle sound"));
+  arduboy.drawFastHLine(2, 20, 124, WHITE);   // top line
+  arduboy.drawFastHLine(2, 54, 124, WHITE);   // bottom line
+  arduboy.drawFastVLine(0, 22, 31, WHITE);    // left line
+  arduboy.drawFastVLine(127, 22, 31, WHITE);  // right line
+  arduboy.drawPixel(1, 21, WHITE);            // top left
+  arduboy.drawPixel(126, 21, WHITE);          // top right
+  arduboy.drawPixel(1, 53, WHITE);            // bottom left
+  arduboy.drawPixel(126, 53, WHITE);          // bottom right
+
+  printCenter(24, F("PAUSED"));
+  printCenter(34, F("Press UP to resume!"));
+  printCenter(44, F("LEFT to toggle sound"));
 }
 
 void run() {
