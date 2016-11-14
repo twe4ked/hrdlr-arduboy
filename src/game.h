@@ -307,6 +307,9 @@ void printCenter(const uint8_t y, const __FlashStringHelper *string) {
 void drawPauseScreen() {
   arduboy.tunes.stopScore();
 
+  drawScore();
+  drawMute();
+
   printCenter(20, F("PAUSED"));
   printCenter(30, F("Press UP to resume!"));
 }
