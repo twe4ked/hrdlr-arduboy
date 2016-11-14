@@ -2,6 +2,7 @@
 #include <bitmaps/banner.h>
 #include <bitmaps/hurdle.h>
 #include <bitmaps/player.h>
+#include <bitmaps/speaker.h>
 
 #include <globals.h>
 #include <game.h>

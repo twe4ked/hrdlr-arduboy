@@ -12,6 +12,8 @@ uint8_t introFrameCount = FRAMERATE * 2;
 int16_t hurdles[maxHurdles];
 uint16_t score = 0;
 uint8_t deadCounter = 0;
+bool muted = false;
+uint8_t leftButtonDebounce = 0;
 
 struct Player {
   uint8_t X;
@@ -50,6 +52,15 @@ void handleInput() {
   if (arduboy.pressed(B_BUTTON) && currentJumpFrame == 0) {
     currentJumpFrame = jumpFrame;
   }
+
+  if (arduboy.pressed(LEFT_BUTTON) && leftButtonDebounce == 0) {
+    muted = !muted;
+    leftButtonDebounce = 10;
+  }
+
+  if (leftButtonDebounce > 0) {
+    leftButtonDebounce--;
+  }
 }
 
 void resetHurdles() {
@@ -63,6 +74,10 @@ void drawScore() {
   char scoreBuffer[16];
   sprintf(scoreBuffer, "%04d", score);
   arduboy.print(scoreBuffer);
+}
+
+void drawMute() {
+  arduboy.drawBitmap(95, 0, speakerFrames[muted ? 1 : 0], speakerFrameWidth, speakerFrameHeight, WHITE);
 }
 
 void drawHurdles() {
@@ -174,7 +189,10 @@ void checkForCollision() {
       player.deathAnimationFrame = 2;
       deadCounter = 10;
       score = 0;
-      arduboy.tunes.tone(300, 50);
+
+      if (!muted) {
+        arduboy.tunes.tone(300, 50);
+      }
     }
 
     // Check for score collision
@@ -202,6 +220,8 @@ void run() {
   drawFloor();
 
   drawScore();
+
+  drawMute();
 
   drawHurdles();
 
