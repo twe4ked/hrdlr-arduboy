@@ -57,7 +57,7 @@ bool collision(
 
 void handleInput() {
   // Jump
-  if (player.isAlive && arduboy.pressed(B_BUTTON) && currentJumpFrame == 0) {
+  if (!gamePaused && player.isAlive && arduboy.pressed(B_BUTTON) && currentJumpFrame == 0) {
     currentJumpFrame = jumpFrame;
   }
 
@@ -66,7 +66,7 @@ void handleInput() {
   }
 
   if (buttons.justPressed(UP_BUTTON)) {
-    gamePaused = true;
+    gamePaused = !gamePaused;
   }
 }
 
@@ -309,10 +309,6 @@ void drawPauseScreen() {
 
   printCenter(20, F("PAUSED"));
   printCenter(30, F("Press UP to resume!"));
-
-  if (buttons.justPressed(UP_BUTTON)) {
-    gamePaused = false;
-  }
 }
 
 void run() {
@@ -325,6 +321,7 @@ void run() {
 
   if (gamePaused) {
     drawPauseScreen();
+    handleInput();
     return;
   }
 
