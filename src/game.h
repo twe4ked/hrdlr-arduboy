@@ -260,6 +260,7 @@ void checkForCollision() {
       if (!muted) {
         arduboy.tunes.playScore(deathMusic);
       }
+      return;
     }
 
     // Check for score collision
