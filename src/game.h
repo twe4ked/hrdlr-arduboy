@@ -290,6 +290,19 @@ void checkForCollision() {
   }
 }
 
+void printCenter(const uint8_t y, const __FlashStringHelper *string) {
+  uint8_t widthOfChar = 5;
+  uint8_t gutter = 1;
+
+  uint8_t numberOfCharacters = strlen_P(reinterpret_cast<const char *>(string));
+  uint8_t widthOfPrintedString = (widthOfChar * numberOfCharacters) + (gutter * (numberOfCharacters-1));
+
+  uint8_t x = (WIDTH - widthOfPrintedString) / 2;
+
+  arduboy.setCursor(x, y);
+  arduboy.print(string);
+}
+
 void run() {
   if (introFrameCount > 0) {
     introFrameCount--;
@@ -301,10 +314,8 @@ void run() {
   if (gamePaused) {
     arduboy.tunes.stopScore();
 
-    arduboy.setCursor(0, 0);
-    arduboy.print(F("Paused"));
-    arduboy.setCursor(0, 10);
-    arduboy.print(F("Press UP to resume!"));
+    printCenter(20, F("PAUSED"));
+    printCenter(30, F("Press UP to resume!"));
 
     if (buttons.justPressed(UP_BUTTON)) {
       gamePaused = false;
