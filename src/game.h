@@ -320,15 +320,10 @@ void run() {
   }
 
   drawPlayer();
-
   drawFloor();
-
   drawScore();
-
   drawMute();
-
   drawHurdles();
-
   drawCoins();
 
   if (player.isAlive && resetFrameCount == 0) {
@@ -348,7 +343,6 @@ void run() {
   }
 
   updateJumpFrame();
-
   updateAnimationFrames();
 
   if (player.isAlive) {
