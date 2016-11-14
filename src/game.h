@@ -16,6 +16,7 @@ int16_t hurdles[maxHurdles];
 int16_t coins[maxCoins];
 uint8_t currentCoinFrame = 0;
 uint16_t score = 0;
+uint16_t highScore = 0;
 uint8_t deadCounter = 0;
 bool muted = false;
 uint8_t leftButtonDebounce = 0;
@@ -84,6 +85,10 @@ void drawScore() {
   arduboy.setCursor(105, 0);
   char scoreBuffer[16];
   sprintf(scoreBuffer, "%04d", score);
+  arduboy.print(scoreBuffer);
+
+  arduboy.setCursor(105, 8);
+  sprintf(scoreBuffer, "%04d", highScore);
   arduboy.print(scoreBuffer);
 }
 
@@ -219,6 +224,13 @@ void updateAnimationFrames() {
   }
 }
 
+void incScore() {
+  score++;
+  if (score >= highScore) {
+    highScore = score;
+  }
+}
+
 void checkForCollision() {
   for (int i = 0; i < maxHurdles; i++) {
     if (
@@ -245,7 +257,7 @@ void checkForCollision() {
         hurdles[i], 0, 2, 2
       )
     ) {
-      score++;
+      incScore();
     }
   }
 
@@ -256,7 +268,7 @@ void checkForCollision() {
         coins[i], coinY, 7, 4
       )
     ) {
-      score++;
+      incScore();
       coins[i] = -coinFrameWidth;
 
       if (!muted) {
