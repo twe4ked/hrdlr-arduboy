@@ -1,4 +1,5 @@
 #include <globals.h>
+#include <music.h>
 
 const uint8_t playerXDefault = 5;
 const uint8_t playerYDefault = HEIGHT - playerFrameHeight - 1;
@@ -191,7 +192,7 @@ void checkForCollision() {
       score = 0;
 
       if (!muted) {
-        arduboy.tunes.tone(300, 50);
+        arduboy.tunes.playScore(deathMusic);
       }
     }
 
@@ -233,6 +234,7 @@ void run() {
   if (deadCounter > 0) {
     if (deadCounter == 1) {
       player.isDead = false;
+      arduboy.tunes.stopScore();
       resetHurdles();
     }
     deadCounter--;
