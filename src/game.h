@@ -27,11 +27,11 @@ struct Player {
   uint8_t idleAnimationFrame;
   uint8_t runningAnimationFrame;
   uint8_t deathAnimationFrame;
-  bool isDead;
+  bool isAlive;
   bool running;
 };
 
-Player player = {playerXDefault, playerYDefault, 0, 0, 0, false, false};
+Player player = {playerXDefault, playerYDefault, 0, 0, 0, true, false};
 
 double jumpCurve(double currentJumpFrame) {
   double n = (currentJumpFrame * (1.0 / jumpFrame));
@@ -56,7 +56,7 @@ bool collision(
 
 void handleInput() {
   // Jump
-  if (!player.isDead && arduboy.pressed(B_BUTTON) && currentJumpFrame == 0) {
+  if (player.isAlive && arduboy.pressed(B_BUTTON) && currentJumpFrame == 0) {
     currentJumpFrame = jumpFrame;
   }
 
@@ -173,7 +173,7 @@ int currentPlayerJumpAnimationFrameIndex() {
 int currentPlayerAnimationFrameIndex() {
   if (currentJumpFrame > 0) {
     return currentPlayerJumpAnimationFrameIndex();
-  } else if (player.isDead) {
+  } else if (!player.isAlive) {
     return (2 - player.deathAnimationFrame) + 10;
   } else if (player.running) {
     return player.runningAnimationFrame;
@@ -183,7 +183,7 @@ int currentPlayerAnimationFrameIndex() {
 }
 
 void drawPlayer() {
-  if (!player.isDead || player.deathAnimationFrame != 0) {
+  if (player.isAlive || player.deathAnimationFrame != 0) {
     arduboy.drawBitmap(player.X, player.Y, playerFrames[currentPlayerAnimationFrameIndex()], playerFrameWidth, playerFrameHeight, WHITE);
   }
 }
@@ -246,7 +246,7 @@ void checkForCollision() {
       )
     ) {
       // Kill player
-      player.isDead = true;
+      player.isAlive = false;
       player.deathAnimationFrame = 2;
       deadCounter = 10;
       score = 0;
@@ -311,7 +311,7 @@ void run() {
 
   drawCoins();
 
-  if (!player.isDead && resetFrameCount == 0) {
+  if (player.isAlive && resetFrameCount == 0) {
     updateHurdles();
     updateCoins();
   }
@@ -320,7 +320,7 @@ void run() {
 
   if (deadCounter > 0) {
     if (deadCounter == 1) {
-      player.isDead = false;
+      player.isAlive = true;
       arduboy.tunes.stopScore();
       reset();
     }
@@ -331,7 +331,7 @@ void run() {
 
   updateAnimationFrames();
 
-  if (!player.isDead) {
+  if (player.isAlive) {
     checkForCollision();
   }
 }
