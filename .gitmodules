@@ -1,0 +1,3 @@
+[submodule "src/lib/ArduboyExtra"]
+	path = src/lib/ArduboyExtra
+	url = git@github.com:yyyc514/ArduboyExtra.git
