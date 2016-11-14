@@ -304,6 +304,17 @@ void printCenter(const uint8_t y, const __FlashStringHelper *string) {
   arduboy.print(string);
 }
 
+void drawPauseScreen() {
+  arduboy.tunes.stopScore();
+
+  printCenter(20, F("PAUSED"));
+  printCenter(30, F("Press UP to resume!"));
+
+  if (buttons.justPressed(UP_BUTTON)) {
+    gamePaused = false;
+  }
+}
+
 void run() {
   if (introFrameCount > 0) {
     introFrameCount--;
@@ -313,14 +324,7 @@ void run() {
   }
 
   if (gamePaused) {
-    arduboy.tunes.stopScore();
-
-    printCenter(20, F("PAUSED"));
-    printCenter(30, F("Press UP to resume!"));
-
-    if (buttons.justPressed(UP_BUTTON)) {
-      gamePaused = false;
-    }
+    drawPauseScreen();
     return;
   }
 
