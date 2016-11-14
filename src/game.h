@@ -56,7 +56,7 @@ bool collision(
 
 void handleInput() {
   // Jump
-  if (arduboy.pressed(B_BUTTON) && currentJumpFrame == 0) {
+  if (!player.isDead && arduboy.pressed(B_BUTTON) && currentJumpFrame == 0) {
     currentJumpFrame = jumpFrame;
   }
 
@@ -316,9 +316,7 @@ void run() {
     updateCoins();
   }
 
-  if (!player.isDead) {
-    handleInput();
-  }
+  handleInput();
 
   if (deadCounter > 0) {
     if (deadCounter == 1) {
