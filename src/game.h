@@ -6,11 +6,15 @@ const uint8_t playerYDefault = HEIGHT - playerFrameHeight - 1;
 const uint8_t jumpHeight = 20;
 const uint8_t jumpFrame = 30;
 const uint8_t maxHurdles = 5;
+const uint8_t maxCoins = 5;
 const uint8_t hurdleY = HEIGHT - hurdleFrameHeight - 1;
+const uint8_t coinY = 30;
 
 uint8_t currentJumpFrame = 0;
 uint8_t introFrameCount = FRAMERATE * 2;
 int16_t hurdles[maxHurdles];
+int16_t coins[maxCoins];
+uint8_t currentCoinFrame = 0;
 uint16_t score = 0;
 uint8_t deadCounter = 0;
 bool muted = false;
@@ -70,6 +74,12 @@ void resetHurdles() {
   }
 }
 
+void resetCoins() {
+  for (int i = 0; i < maxCoins; i++) {
+    coins[i] = -coinFrameWidth;
+  }
+}
+
 void drawScore() {
   arduboy.setCursor(105, 0);
   char scoreBuffer[16];
@@ -84,6 +94,12 @@ void drawMute() {
 void drawHurdles() {
   for (int i = 0; i < maxHurdles; i++) {
     arduboy.drawBitmap(hurdles[i], hurdleY, hurdleFrames[0], hurdleFrameWidth, hurdleFrameHeight, WHITE);
+  }
+}
+
+void drawCoins() {
+  for (int i = 0; i < maxCoins; i++) {
+    arduboy.drawBitmap(coins[i], coinY, coinFrames[currentCoinFrame], coinFrameWidth, coinFrameHeight, WHITE);
   }
 }
 
@@ -106,6 +122,28 @@ void updateHurdles() {
     }
 
     hurdles[i]--;
+  }
+}
+
+void updateCoins() {
+  for (int i = 0; i < maxCoins; i++) {
+    if (coins[i] < -coinFrameWidth) {
+      int minDistance;
+
+      if (i == 0) {
+        minDistance = coins[maxCoins-1];
+      } else {
+        minDistance = coins[i-1];
+      }
+
+      if (minDistance < WIDTH) {
+        minDistance = WIDTH;
+      }
+
+      coins[i] = minDistance + randInRange(40, 80);
+    }
+
+    coins[i]--;
   }
 }
 
@@ -159,6 +197,10 @@ void updateJumpFrame() {
 // 6-9   : running
 // 10-12 : dying
 void updateAnimationFrames() {
+  if (arduboy.everyXFrames(16)) {
+    currentCoinFrame = currentCoinFrame == 0 ? 1 : 0;
+  }
+
   if (arduboy.everyXFrames(8)) {
     // 0-2
     player.idleAnimationFrame++;
@@ -206,6 +248,22 @@ void checkForCollision() {
       score++;
     }
   }
+
+  for (int i = 0; i < maxCoins; i++) {
+    if (
+      collision(
+        player.X, player.Y, playerFrameHeight, playerFrameWidth,
+        coins[i], coinY, 7, 4
+      )
+    ) {
+      score++;
+      coins[i] = -coinFrameWidth;
+
+      if (!muted) {
+        arduboy.tunes.tone(300, 50);
+      }
+    }
+  }
 }
 
 void run() {
@@ -226,8 +284,11 @@ void run() {
 
   drawHurdles();
 
+  drawCoins();
+
   if (!player.isDead) {
     updateHurdles();
+    updateCoins();
     handleInput();
   }
 
@@ -236,6 +297,7 @@ void run() {
       player.isDead = false;
       arduboy.tunes.stopScore();
       resetHurdles();
+      resetCoins();
     }
     deadCounter--;
   }

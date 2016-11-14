@@ -1,5 +1,6 @@
 #include <Math.h>
 #include <bitmaps/banner.h>
+#include <bitmaps/coin.h>
 #include <bitmaps/hurdle.h>
 #include <bitmaps/player.h>
 #include <bitmaps/speaker.h>
@@ -9,6 +10,7 @@
 
 void setup() {
   resetHurdles();
+  resetCoins();
   arduboy.beginNoLogo();
 }
 
