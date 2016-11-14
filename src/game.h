@@ -11,7 +11,7 @@ const uint8_t hurdleY = HEIGHT - hurdleFrameHeight - 1;
 const uint8_t coinY = 30;
 
 uint8_t currentJumpFrame = 0;
-uint8_t introFrameCount = FRAMERATE * 2;
+uint8_t introFrameCount = arduboy.frameRate * 2;
 uint8_t resetFrameCount;
 int16_t hurdles[maxHurdles];
 int16_t coins[maxCoins];
@@ -87,7 +87,7 @@ void reset() {
   resetHurdles();
   resetCoins();
 
-  resetFrameCount = FRAMERATE;
+  resetFrameCount = arduboy.frameRate;
   player.running = false;
 }
 

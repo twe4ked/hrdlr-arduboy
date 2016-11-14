@@ -3,8 +3,6 @@
 
 #include <Arduboy.h>
 
-#define FRAMERATE 60
-
 Arduboy arduboy;
 
 #endif
