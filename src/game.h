@@ -20,6 +20,7 @@ uint16_t score = 0;
 uint16_t highScore = 0;
 uint8_t deadCounter = 0;
 bool muted = false;
+bool gamePaused = false;
 
 struct Player {
   uint8_t X;
@@ -62,6 +63,10 @@ void handleInput() {
 
   if (buttons.justPressed(LEFT_BUTTON)) {
     muted = !muted;
+  }
+
+  if (buttons.justPressed(UP_BUTTON)) {
+    gamePaused = true;
   }
 }
 
@@ -290,6 +295,20 @@ void run() {
     introFrameCount--;
     arduboy.drawBitmap(0, 0, bannerFrames[0], bannerFrameWidth, bannerFrameHeight, WHITE);
     arduboy.display();
+    return;
+  }
+
+  if (gamePaused) {
+    arduboy.tunes.stopScore();
+
+    arduboy.setCursor(0, 0);
+    arduboy.print(F("Paused"));
+    arduboy.setCursor(0, 10);
+    arduboy.print(F("Press UP to resume!"));
+
+    if (buttons.justPressed(UP_BUTTON)) {
+      gamePaused = false;
+    }
     return;
   }
 
