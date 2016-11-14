@@ -9,8 +9,7 @@
 #include <game.h>
 
 void setup() {
-  resetHurdles();
-  resetCoins();
+  reset();
   arduboy.beginNoLogo();
 }
 

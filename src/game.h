@@ -12,6 +12,7 @@ const uint8_t coinY = 30;
 
 uint8_t currentJumpFrame = 0;
 uint8_t introFrameCount = FRAMERATE * 2;
+uint8_t resetFrameCount;
 int16_t hurdles[maxHurdles];
 int16_t coins[maxCoins];
 uint8_t currentCoinFrame = 0;
@@ -28,9 +29,10 @@ struct Player {
   uint8_t runningAnimationFrame;
   uint8_t deathAnimationFrame;
   bool isDead;
+  bool running;
 };
 
-Player player = {playerXDefault, playerYDefault, 0, 0, 0, false};
+Player player = {playerXDefault, playerYDefault, 0, 0, 0, false, false};
 
 double jumpCurve(double currentJumpFrame) {
   double n = (currentJumpFrame * (1.0 / jumpFrame));
@@ -79,6 +81,14 @@ void resetCoins() {
   for (int i = 0; i < maxCoins; i++) {
     coins[i] = -coinFrameWidth;
   }
+}
+
+void reset() {
+  resetHurdles();
+  resetCoins();
+
+  resetFrameCount = FRAMERATE;
+  player.running = false;
 }
 
 void drawScore() {
@@ -171,8 +181,10 @@ int currentPlayerAnimationFrameIndex() {
     return currentPlayerJumpAnimationFrameIndex();
   } else if (player.isDead) {
     return (2 - player.deathAnimationFrame) + 10;
-  } else {
+  } else if (player.running) {
     return player.runningAnimationFrame;
+  } else {
+    return player.idleAnimationFrame;
   }
 }
 
@@ -286,6 +298,13 @@ void run() {
     return;
   }
 
+  if (resetFrameCount > 0) {
+    resetFrameCount--;
+    if (resetFrameCount == 0) {
+      player.running = true;
+    }
+  }
+
   drawPlayer();
 
   drawFloor();
@@ -298,9 +317,12 @@ void run() {
 
   drawCoins();
 
-  if (!player.isDead) {
+  if (!player.isDead && resetFrameCount == 0) {
     updateHurdles();
     updateCoins();
+  }
+
+  if (!player.isDead) {
     handleInput();
   }
 
@@ -308,8 +330,7 @@ void run() {
     if (deadCounter == 1) {
       player.isDead = false;
       arduboy.tunes.stopScore();
-      resetHurdles();
-      resetCoins();
+      reset();
     }
     deadCounter--;
   }
