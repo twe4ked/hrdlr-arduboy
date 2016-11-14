@@ -20,7 +20,6 @@ uint16_t score = 0;
 uint16_t highScore = 0;
 uint8_t deadCounter = 0;
 bool muted = false;
-uint8_t leftButtonDebounce = 0;
 
 struct Player {
   uint8_t X;
@@ -61,13 +60,8 @@ void handleInput() {
     currentJumpFrame = jumpFrame;
   }
 
-  if (arduboy.pressed(LEFT_BUTTON) && leftButtonDebounce == 0) {
+  if (buttons.justPressed(LEFT_BUTTON)) {
     muted = !muted;
-    leftButtonDebounce = 10;
-  }
-
-  if (leftButtonDebounce > 0) {
-    leftButtonDebounce--;
   }
 }
 

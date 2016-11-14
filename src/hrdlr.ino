@@ -8,13 +8,21 @@
 #include <globals.h>
 #include <game.h>
 
+boolean nextFrame() {
+  if (arduboy.nextFrame()) {
+    buttons.poll();
+    return true;
+  }
+  return false;
+}
+
 void setup() {
   reset();
   arduboy.beginNoLogo();
 }
 
 void loop() {
-  if (!(arduboy.nextFrame())) return;
+  if (!(nextFrame())) return;
 
   arduboy.clear();
   run();
