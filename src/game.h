@@ -248,7 +248,8 @@ void checkForCollision() {
       // Kill player
       player.isAlive = false;
       player.deathAnimationFrame = 2;
-      deadCounter = 10;
+      // 3 frames * updates every 8 = 24
+      deadCounter = 24;
       score = 0;
 
       if (!muted) {
