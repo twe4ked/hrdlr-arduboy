@@ -59,9 +59,9 @@ void resetHurdles() {
 }
 
 void drawScore() {
-  arduboy.setCursor(100, 1);
+  arduboy.setCursor(105, 0);
   char scoreBuffer[16];
-  sprintf(scoreBuffer, "% 3d", score);
+  sprintf(scoreBuffer, "%04d", score);
   arduboy.print(scoreBuffer);
 }
 
