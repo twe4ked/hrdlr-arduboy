@@ -319,12 +319,12 @@ void run() {
   handleInput();
 
   if (deadCounter > 0) {
-    if (deadCounter == 1) {
+    deadCounter--;
+    if (deadCounter == 0) {
       player.isAlive = true;
       arduboy.tunes.stopScore();
       reset();
     }
-    deadCounter--;
   }
 
   updateJumpFrame();
