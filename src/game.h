@@ -312,6 +312,7 @@ void drawPauseScreen() {
 
   printCenter(20, F("PAUSED"));
   printCenter(30, F("Press UP to resume!"));
+  printCenter(40, F("LEFT to toggle sound"));
 }
 
 void run() {
