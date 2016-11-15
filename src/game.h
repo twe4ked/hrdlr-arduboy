@@ -304,17 +304,38 @@ void printCenter(const uint8_t y, const __FlashStringHelper *string) {
   arduboy.print(string);
 }
 
+void drawSlightlyRoundRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h) {
+  arduboy.drawRoundRect(x, y, w, h, 3, WHITE);
+
+  // top left
+  arduboy.drawPixel(x+1, y, WHITE);
+  arduboy.drawPixel(x, y+1, WHITE);
+
+  // top right
+  arduboy.drawPixel(x+w-2, y, WHITE);
+  arduboy.drawPixel(x+w-1, y+1, WHITE);
+
+  // bottom left
+  arduboy.drawPixel(x+1, y+h-1, WHITE);
+  arduboy.drawPixel(x, y+h-2, WHITE);
+
+  // bottom right
+  arduboy.drawPixel(x+w-2, y+h-1, WHITE);
+  arduboy.drawPixel(x+w-1, y+h-2, WHITE);
+}
+
 void drawPauseScreen() {
   arduboy.tunes.stopScore();
 
   drawScore();
   drawMute();
 
-  arduboy.drawRoundRect(0, 20, WIDTH, 35, 3, WHITE);
+  drawSlightlyRoundRect(0, 17, 127, 42);
+  drawSlightlyRoundRect(2, 19, 123, 38);
 
   printCenter(24, F("PAUSED"));
-  printCenter(34, F("Press UP to resume!"));
-  printCenter(44, F("LEFT to toggle sound"));
+  printCenter(34, F("UP to resume!"));
+  printCenter(44, F("LEFT toggle sound"));
 }
 
 void run() {
