@@ -9,6 +9,7 @@ const uint8_t maxHurdles = 5;
 const uint8_t maxCoins = 5;
 const uint8_t hurdleY = HEIGHT - hurdleFrameHeight - 1;
 const uint8_t coinY = 30;
+const uint16_t maxScore = 9999;
 
 uint8_t currentJumpFrame = 0;
 uint8_t introFrameCount = arduboy.frameRate * 2;
@@ -17,7 +18,6 @@ int16_t hurdles[maxHurdles];
 int16_t coins[maxCoins];
 uint8_t currentCoinFrame = 0;
 uint16_t score = 0;
-uint16_t highScore = 0;
 uint8_t deadCounter = 0;
 bool muted = false;
 bool gamePaused = false;
@@ -90,6 +90,24 @@ void reset() {
   player.running = false;
 }
 
+void saveHighScore(uint16_t score) {
+  EEPROM.put(EEPROM_STORAGE_SPACE_START, score);
+}
+
+uint16_t getHighScore() {
+  uint16_t score;
+  EEPROM.get(EEPROM_STORAGE_SPACE_START, score);
+  return score;
+}
+
+void ensureValidHighScore() {
+  uint16_t score;
+  EEPROM.get(EEPROM_STORAGE_SPACE_START, score);
+  if (score > maxScore) {
+    saveHighScore(0);
+  }
+}
+
 void drawScore() {
   arduboy.setCursor(105, 0);
   char scoreBuffer[16];
@@ -97,7 +115,7 @@ void drawScore() {
   arduboy.print(scoreBuffer);
 
   arduboy.setCursor(105, 8);
-  sprintf(scoreBuffer, "%04d", highScore);
+  sprintf(scoreBuffer, "%04d", getHighScore());
   arduboy.print(scoreBuffer);
 }
 
@@ -236,9 +254,12 @@ void updateAnimationFrames() {
 }
 
 void incScore() {
-  score++;
-  if (score >= highScore) {
-    highScore = score;
+  if (score < maxScore) {
+    score++;
+
+    if (score >= getHighScore()) {
+      saveHighScore(score);
+    }
   }
 }
 

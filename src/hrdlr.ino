@@ -17,6 +17,7 @@ boolean nextFrame() {
 }
 
 void setup() {
+  ensureValidHighScore();
   reset();
   arduboy.beginNoLogo();
 }
