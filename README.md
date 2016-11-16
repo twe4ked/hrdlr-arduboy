@@ -12,3 +12,7 @@ platformio lib install 192
 # Build
 make
 ```
+
+## TODO
+
+- Fix bug where death animation doesn't run if player is jumping up
