@@ -263,6 +263,18 @@ void incScore() {
   }
 }
 
+void playerDeath() {
+  player.isAlive = false;
+  player.deathAnimationFrame = 2;
+  // 3 frames * updates every 8 = 24
+  deadCounter = 24;
+  score = 0;
+
+  if (!muted) {
+    arduboy.tunes.playScore(deathMusic);
+  }
+}
+
 void checkForCollision() {
   for (int i = 0; i < maxHurdles; i++) {
     if (
@@ -271,16 +283,7 @@ void checkForCollision() {
         hurdles[i], hurdleY, hurdleFrameHeight, hurdleFrameWidth
       )
     ) {
-      // Kill player
-      player.isAlive = false;
-      player.deathAnimationFrame = 2;
-      // 3 frames * updates every 8 = 24
-      deadCounter = 24;
-      score = 0;
-
-      if (!muted) {
-        arduboy.tunes.playScore(deathMusic);
-      }
+      playerDeath();
       return;
     }
 
