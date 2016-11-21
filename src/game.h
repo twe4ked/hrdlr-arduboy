@@ -149,19 +149,9 @@ void drawCoins() {
 void updateHurdles() {
   for (int i = 0; i < maxHurdles; i++) {
     if (hurdles[i] < -hurdleFrameWidth) {
-      int minDistance;
-
-      if (i == 0) {
-        minDistance = hurdles[maxHurdles-1];
-      } else {
-        minDistance = hurdles[i-1];
-      }
-
-      minDistance = max(minDistance, WIDTH);
-
+      int minDistance = max(hurdles[(i == 0 ? maxHurdles : i) - 1], WIDTH);
       hurdles[i] = minDistance + randInRange(40, 80);
     }
-
     hurdles[i]--;
   }
 }
@@ -169,19 +159,9 @@ void updateHurdles() {
 void updateCoins() {
   for (int i = 0; i < maxCoins; i++) {
     if (coins[i] < -coinFrameWidth) {
-      int minDistance;
-
-      if (i == 0) {
-        minDistance = coins[maxCoins-1];
-      } else {
-        minDistance = coins[i-1];
-      }
-
-      minDistance = max(minDistance, WIDTH);
-
+      int minDistance = max(coins[(i == 0 ? maxCoins : i) - 1], WIDTH);
       coins[i] = minDistance + randInRange(40, 80);
     }
-
     coins[i]--;
   }
 }
