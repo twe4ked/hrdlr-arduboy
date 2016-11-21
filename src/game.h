@@ -297,6 +297,7 @@ void checkForCollision() {
   }
 }
 
+// TODO: De-dupe
 void printCenterNormalString(const uint8_t y, const char *string) {
   uint8_t widthOfChar = 5;
   uint8_t gutter = 1;
