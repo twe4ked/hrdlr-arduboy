@@ -157,9 +157,7 @@ void updateHurdles() {
         minDistance = hurdles[i-1];
       }
 
-      if (minDistance < WIDTH) {
-        minDistance = WIDTH;
-      }
+      minDistance = max(minDistance, WIDTH);
 
       hurdles[i] = minDistance + randInRange(40, 80);
     }
@@ -179,9 +177,7 @@ void updateCoins() {
         minDistance = coins[i-1];
       }
 
-      if (minDistance < WIDTH) {
-        minDistance = WIDTH;
-      }
+      minDistance = max(minDistance, WIDTH);
 
       coins[i] = minDistance + randInRange(40, 80);
     }
