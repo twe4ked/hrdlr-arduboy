@@ -43,9 +43,13 @@ struct HighScore {
 
 HighScore highScores[3];
 
+double jumpCurveInternal(double x) {
+  return sin((x * 180) * PI / 180);
+}
+
 double jumpCurve(double currentJumpFrame) {
-  double n = (currentJumpFrame * (1.0 / jumpFrame));
-  return sin((n * 180) * PI / 180) * jumpHeight;
+  double n = 1 - (currentJumpFrame * (1.0 / jumpFrame));
+  return jumpCurveInternal(n) * jumpHeight;
 }
 
 uint8_t randInRange(int minN, int maxN) {
