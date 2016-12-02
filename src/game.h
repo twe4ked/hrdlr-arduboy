@@ -419,6 +419,37 @@ void drawHighScoreScreen() {
   drawHighScoreLine(3, highScores[2]);
 }
 
+void setupHighScore() {
+  player.isAlive = true;
+  deathScreen = true;
+
+  highScores[0] = getHighScore(0);
+  highScores[1] = getHighScore(1);
+  highScores[2] = getHighScore(2);
+
+  if (score > highScores[0].score) {
+    currentRank = 0;
+    highScores[2] = highScores[1]; // mid -> bot
+    highScores[1] = highScores[0]; // top -> mid
+  } else if (score > highScores[1].score) {
+    currentRank = 1;
+    highScores[2] = highScores[1]; // mid -> bot
+  } else if (score > highScores[2].score) {
+    currentRank = 2;
+  }
+
+  if (score > highScores[2].score) {
+    hasNewHighScore = true;
+    highScores[currentRank] = HighScore {score, "AAA"};
+    currentInitial = 0;
+  } else {
+    hasNewHighScore = false;
+  }
+
+  arduboy.tunes.stopScore();
+  reset();
+}
+
 void run() {
   if (introFrameCount > 0) {
     introFrameCount--;
@@ -477,34 +508,7 @@ void run() {
   if (deadCounter > 0) {
     deadCounter--;
     if (deadCounter == 0) {
-      player.isAlive = true;
-      deathScreen = true;
-
-      highScores[0] = getHighScore(0);
-      highScores[1] = getHighScore(1);
-      highScores[2] = getHighScore(2);
-
-      if (score > highScores[0].score) {
-        currentRank = 0;
-        highScores[2] = highScores[1]; // mid -> bot
-        highScores[1] = highScores[0]; // top -> mid
-      } else if (score > highScores[1].score) {
-        currentRank = 1;
-        highScores[2] = highScores[1]; // mid -> bot
-      } else if (score > highScores[2].score) {
-        currentRank = 2;
-      }
-
-      if (score > highScores[2].score) {
-        hasNewHighScore = true;
-        highScores[currentRank] = HighScore {score, "AAA"};
-        currentInitial = 0;
-      } else {
-        hasNewHighScore = false;
-      }
-
-      arduboy.tunes.stopScore();
-      reset();
+      setupHighScore();
     }
   }
 
