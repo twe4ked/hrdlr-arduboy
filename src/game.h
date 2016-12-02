@@ -450,6 +450,15 @@ void setupHighScore() {
   reset();
 }
 
+void updateDeadCounter() {
+  if (deadCounter > 0) {
+    deadCounter--;
+    if (deadCounter == 0) {
+      setupHighScore();
+    }
+  }
+}
+
 void run() {
   if (introFrameCount > 0) {
     introFrameCount--;
@@ -505,13 +514,7 @@ void run() {
 
   handleInput();
 
-  if (deadCounter > 0) {
-    deadCounter--;
-    if (deadCounter == 0) {
-      setupHighScore();
-    }
-  }
-
+  updateDeadCounter();
   updateJumpFrame();
   updateAnimationFrames();
 
