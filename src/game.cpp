@@ -557,4 +557,3 @@ void gameLoop() {
   run();
   arduboy.display();
 }
-
